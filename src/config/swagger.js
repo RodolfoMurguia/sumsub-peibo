@@ -35,6 +35,14 @@ const options = {
         name: 'Info',
         description: 'Service information endpoints',
       },
+      {
+        name: 'Webhooks',
+        description: 'Webhook endpoints para recibir notificaciones',
+      },
+      {
+        name: 'Documents',
+        description: 'Endpoints para gestión de documentos',
+      },
     ],
   },
   apis: ['./src/routes/*.js', './src/controllers/*.js', './src/app.js'],

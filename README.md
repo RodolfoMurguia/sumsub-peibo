@@ -19,9 +19,13 @@ sumsub-peibo/
 │   ├── config/
 │   │   └── swagger.js
 │   ├── controllers/
-│   │   └── healthController.js
+│   │   ├── healthController.js
+│   │   ├── webhookController.js
+│   │   └── documentsController.js
 │   ├── routes/
-│   │   └── healthRoutes.js
+│   │   ├── healthRoutes.js
+│   │   ├── webhookRoutes.js
+│   │   └── documentsRoutes.js
 │   ├── middleware/
 │   ├── app.js
 │   └── server.js
@@ -105,6 +109,40 @@ Desde Swagger UI puedes:
       "service": "sumsub-onboarding-service",
       "version": "1.0.0",
       "environment": "development"
+    }
+    ```
+
+### Webhook - Results
+- **POST** `/results`
+  - Descripción: Endpoint webhook para recibir resultados del sistema de onboarding
+  - Tipo: Webhook
+  - Respuesta de ejemplo:
+    ```json
+    {
+      "success": true,
+      "message": "Webhook received successfully",
+      "timestamp": "2025-11-18T03:45:00.000Z"
+    }
+    ```
+
+### Documents
+- **GET** `/documents`
+  - Descripción: Obtiene información de muestra sobre documentos procesados
+  - Respuesta de ejemplo:
+    ```json
+    {
+      "success": true,
+      "data": {
+        "documentId": "doc_12345abcde",
+        "type": "passport",
+        "status": "verified",
+        "uploadedAt": "2025-11-18T03:45:00.000Z",
+        "metadata": {
+          "country": "US",
+          "expiryDate": "2030-12-31"
+        }
+      },
+      "timestamp": "2025-11-18T03:45:00.000Z"
     }
     ```
 
