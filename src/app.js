@@ -4,6 +4,8 @@
  */
 
 const express = require('express');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 const healthRoutes = require('./routes/healthRoutes');
 
 const app = express();
@@ -18,14 +20,51 @@ app.use((req, res, next) => {
   next();
 });
 
+// Swagger Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'Sumsub Onboarding API Docs'
+}));
+
 // Routes
 app.use('/health', healthRoutes);
 
-// Root endpoint
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: Información del servicio
+ *     description: Retorna información básica del servicio y endpoints disponibles
+ *     tags: [Info]
+ *     responses:
+ *       200:
+ *         description: Información del servicio
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 service:
+ *                   type: string
+ *                   example: Sumsub Onboarding Service
+ *                 version:
+ *                   type: string
+ *                   example: 1.0.0
+ *                 documentation:
+ *                   type: string
+ *                   example: /api-docs
+ *                 endpoints:
+ *                   type: object
+ *                   properties:
+ *                     health:
+ *                       type: string
+ *                       example: /health
+ */
 app.get('/', (req, res) => {
   res.json({
     service: 'Sumsub Onboarding Service',
     version: '1.0.0',
+    documentation: '/api-docs',
     endpoints: {
       health: '/health'
     }

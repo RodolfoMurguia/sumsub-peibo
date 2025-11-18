@@ -9,12 +9,15 @@ Servicio de reinterpretación de onboarding con arquitectura MVC usando Node.js 
 - Health endpoint para monitoreo
 - Docker y Docker Compose
 - Express.js framework
+- Documentación de API con Swagger UI
 
 ## Estructura del Proyecto
 
 ```
 sumsub-peibo/
 ├── src/
+│   ├── config/
+│   │   └── swagger.js
 │   ├── controllers/
 │   │   └── healthController.js
 │   ├── routes/
@@ -63,7 +66,27 @@ npm run docker:down
 docker-compose down
 ```
 
+## Documentación de la API
+
+Una vez que el servidor esté corriendo, accede a la documentación interactiva de Swagger:
+
+```
+http://localhost:3000/api-docs
+```
+
+Desde Swagger UI puedes:
+- Ver todos los endpoints disponibles
+- Probar los endpoints directamente desde el navegador
+- Ver los esquemas de datos de entrada y salida
+- Ver ejemplos de respuestas
+
 ## Endpoints
+
+### API Documentation (Swagger UI)
+- **GET** `/api-docs`
+  - Descripción: Documentación interactiva de la API con Swagger UI
+  - Permite probar todos los endpoints directamente desde el navegador
+  - Incluye esquemas de datos y ejemplos de respuestas
 
 ### Root
 - **GET** `/`
