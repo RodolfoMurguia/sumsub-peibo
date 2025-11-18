@@ -1,0 +1,25 @@
+{
+  "name": "sumsub-onboarding-service",
+  "version": "1.0.0",
+  "description": "Servicio de reinterpretación de onboarding",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down"
+  },
+  "keywords": ["onboarding", "sumsub", "health-check"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}
