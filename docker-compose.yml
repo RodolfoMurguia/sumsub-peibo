@@ -13,6 +13,15 @@ services:
       - NODE_ENV=production
       - PORT=3000
       - HOST=0.0.0.0
+      - MONGODB_URI=mongodb://mongo:27017/sumsub-onboarding
+
+      - SUMSUB_API_KEY=sbx:wFqyBcFu7tLbV9EVnZHQLsEo.65ZuEX4gRDgY3uHVRyRFcpgvF08DpOly
+      - SUMSUB_API_SECRET=ZSjsdbrkf9KoDJn9nBjv4KGqnf19kO0m  
+      - SUMSUB_API_URL=https://api.sumsub.com
+
+
+    depends_on:
+      - mongo
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1); })"]
       interval: 30s
@@ -21,6 +30,31 @@ services:
       start_period: 5s
     networks:
       - onboarding-network
+
+  mongo:
+    image: mongo:7.0
+    container_name: sumsub-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin123
+      - MONGO_INITDB_DATABASE=sumsub-onboarding
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - onboarding-network
+
+volumes:
+  mongo-data:
+    driver: local
 
 networks:
   onboarding-network:
