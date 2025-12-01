@@ -43,9 +43,20 @@ const options = {
         name: 'Documents',
         description: 'Endpoints para gestión de documentos',
       },
+      {
+        name: 'Leads',
+        description: 'Endpoints para gestión de leads',
+      },
     ],
   },
-  apis: ['./src/routes/*.js', './src/controllers/*.js', './src/app.js'],
+  apis: [
+    './src/app.js',
+    './src/routes/healthRoutes.js',
+    './src/routes/webhookRoutes.js',
+    './src/routes/documentsRoutes.js',
+    './src/routes/leadsRoutes.js',
+    './src/controllers/*.js'
+  ],
 };
 
 const swaggerSpec = swaggerJsdoc(options);

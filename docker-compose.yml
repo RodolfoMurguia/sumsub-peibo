@@ -13,13 +13,11 @@ services:
       - NODE_ENV=production
       - PORT=3000
       - HOST=0.0.0.0
-      - MONGODB_URI=mongodb://mongo:27017/sumsub-onboarding
-
-      - SUMSUB_API_KEY=sbx:wFqyBcFu7tLbV9EVnZHQLsEo.65ZuEX4gRDgY3uHVRyRFcpgvF08DpOly
-      - SUMSUB_API_SECRET=ZSjsdbrkf9KoDJn9nBjv4KGqnf19kO0m  
-      - SUMSUB_API_URL=https://api.sumsub.com
-
-
+      - MONGODB_URI=mongodb://admin:admin123@mongo:27017/sumsub-onboarding?authSource=admin
+      - SUMSUB_APP_TOKEN=sbx:wFqyBcFu7tLbV9EVnZHQLsEo.65ZuEX4gRDgY3uHVRyRFcpgvF08DpOly
+      - SUMSUB_SECRET_KEY=ZSjsdbrkf9KoDJn9nBjv4KGqnf19kO0m
+      - SUMSUB_BASE_URL=https://api.sumsub.com
+      - SUMSUB_LEVEL_NAME=KYC-PEIBO
     depends_on:
       - mongo
     healthcheck:
