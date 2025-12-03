@@ -8,6 +8,7 @@ const sumsubConfig = {
   secretKey: process.env.SUMSUB_SECRET_KEY,
   baseUrl: process.env.SUMSUB_BASE_URL || 'https://api.sumsub.com',
   levelName: process.env.SUMSUB_LEVEL_NAME || 'KYC-PEIBO',
+  levelNameKyb: process.env.SUMSUB_LEVEL_NAME_KYB || 'KYB-PEIBO',
 };
 
 // Validación básica

@@ -22,12 +22,22 @@ class LeadsController {
    *             $ref: '#/components/schemas/LeadCreateRequest'
    *           examples:
    *             example1:
-   *               summary: Lead creation example
+   *               summary: Lead creation example (Individual)
    *               value:
    *                 first_name: "Juan"
    *                 last_name: "Pérez"
    *                 email: "juan.perez@example.com"
    *                 phone: "+521234567890"
+   *                 lead_type: "individual"
+   *             example2:
+   *               summary: Lead creation example (Company)
+   *               value:
+   *                 first_name: "Maria"
+   *                 last_name: "Gomez"
+   *                 email: "maria@techsolutions.com"
+   *                 phone: "+521234567891"
+   *                 lead_type: "company"
+   *                 company_name: "Tech Solutions S.A. de C.V."
    *     responses:
    *       201:
    *         description: Lead created successfully
@@ -50,23 +60,29 @@ class LeadsController {
    */
   async createLead(req, res) {
     const timestamp = new Date().toISOString();
-    const { first_name, last_name, email, phone } = req.body;
+    const { first_name, last_name, email, phone, lead_type, company_name } = req.body;
 
     try {
-      console.log(`${timestamp} - [LEADS] Creating new lead - Email: ${email}, Phone: ${phone}`);
+      console.log(`${timestamp} - [LEADS] Creating new lead - Email: ${email}, Phone: ${phone}, Type: ${lead_type || 'individual'}`);
 
       // Validar campos requeridos
-      if (!first_name || !last_name || !email || !phone) {
-        const missingFields = [];
-        if (!first_name) missingFields.push('first_name');
-        if (!last_name) missingFields.push('last_name');
-        if (!email) missingFields.push('email');
-        if (!phone) missingFields.push('phone');
+      const missingFields = [];
+      if (!first_name) missingFields.push('first_name');
+      if (!last_name) missingFields.push('last_name');
+      if (!email) missingFields.push('email');
+      if (!phone) missingFields.push('phone');
 
+      // Validar company_name si es company
+      if (lead_type === 'company' && !company_name) {
+        missingFields.push('company_name');
+      }
+
+      if (missingFields.length > 0) {
         console.log(`${timestamp} - [LEADS] Validation error - Missing fields: ${missingFields.join(', ')}`);
         return res.status(400).json({
           status: 'ERROR',
-          message: 'Bad Request'
+          message: 'Bad Request',
+          details: `Missing fields: ${missingFields.join(', ')}`
         });
       }
 
@@ -87,6 +103,8 @@ class LeadsController {
         email: email.trim(),
         phone: phone.trim(),
         status: 'CREATED',
+        lead_type: lead_type || 'individual',
+        company_name: company_name ? company_name.trim() : undefined,
       });
 
       let savedLead = await newLead.save();

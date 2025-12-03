@@ -23,8 +23,53 @@ class WebhookController {
       // Nota: applicantCreated a veces llega sin levelName o con uno diferente si es global, 
       // pero los críticos (pending, reviewed) suelen traerlo.
       // Si el payload trae levelName, lo validamos contra el configurado.
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
       if (payload.levelName && payload.levelName !== sumsubConfig.levelName) {
         console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName})`);
+=======
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+>>>>>>> Incoming (Background Agent changes)
+=======
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+>>>>>>> Incoming (Background Agent changes)
+=======
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+>>>>>>> Incoming (Background Agent changes)
+=======
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+>>>>>>> Incoming (Background Agent changes)
+=======
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+>>>>>>> Incoming (Background Agent changes)
+=======
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+>>>>>>> Incoming (Background Agent changes)
+=======
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+>>>>>>> Incoming (Background Agent changes)
+=======
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+>>>>>>> Incoming (Background Agent changes)
+=======
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+>>>>>>> Incoming (Background Agent changes)
         return res.status(200).send('Ignored'); // Responder 200 para que Sumsub no reintente infinitamente
       }
 
