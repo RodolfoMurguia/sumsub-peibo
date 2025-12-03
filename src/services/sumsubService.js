@@ -113,6 +113,14 @@ class SumsubService {
 
     if (isCompany && leadData.company_name) {
       payload.fixedInfo.companyName = leadData.company_name;
+    // Para empresas, agregar companyName en fixedInfo.companyInfo (KYB 2.0)
+    if (isCompany && leadData.company_name) {
+      payload.fixedInfo.companyInfo = {
+        companyName: leadData.company_name
+      };
+
+    if (isCompany && leadData.company_name) {
+      payload.fixedInfo.companyName = leadData.company_name;
     }
 
     try {

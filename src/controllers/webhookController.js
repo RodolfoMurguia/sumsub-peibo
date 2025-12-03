@@ -23,53 +23,37 @@ class WebhookController {
       // Nota: applicantCreated a veces llega sin levelName o con uno diferente si es global, 
       // pero los críticos (pending, reviewed) suelen traerlo.
       // Si el payload trae levelName, lo validamos contra el configurado.
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
       if (payload.levelName && payload.levelName !== sumsubConfig.levelName) {
         console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName})`);
-=======
       if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
         console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
->>>>>>> Incoming (Background Agent changes)
-=======
+
       if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
         console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
->>>>>>> Incoming (Background Agent changes)
-=======
+
       if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
         console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
->>>>>>> Incoming (Background Agent changes)
-=======
+
       if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
         console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
->>>>>>> Incoming (Background Agent changes)
-=======
+
       if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
         console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
->>>>>>> Incoming (Background Agent changes)
-=======
+
       if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
         console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
->>>>>>> Incoming (Background Agent changes)
-=======
+
       if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
         console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
->>>>>>> Incoming (Background Agent changes)
-=======
+
       if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
         console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
->>>>>>> Incoming (Background Agent changes)
-=======
+
       if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
         console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
->>>>>>> Incoming (Background Agent changes)
+
         return res.status(200).send('Ignored'); // Responder 200 para que Sumsub no reintente infinitamente
       }
 
@@ -137,49 +121,159 @@ class WebhookController {
               const metadataResources = metadataResourcesResponse?.items || [];
               console.log(`${timestamp} - [WEBHOOK] Extracted ${metadataResources.length} metadata resources`);
 
-              // Formatear y guardar payload de Peibo (sin enviar)
-              try {
-                const peiboPayload = formatSumsubDataToPeibo(applicantData, lead, metadataResources);
-                console.log(`${timestamp} - [WEBHOOK] Peibo Payload:`, JSON.stringify(peiboPayload, null, 2));
+              // Procesamiento condicional según lead_type
+              console.log(`${timestamp} - [WEBHOOK] Lead data - lead_type: "${lead.lead_type}", company_name: "${lead.company_name}"`);
+              console.log(`${timestamp} - [WEBHOOK] Checking condition: lead.lead_type === 'company' => ${lead.lead_type === 'company'}`);
+              
+              if (lead.lead_type === 'company') {
+                // ========== PROCESO KYB (PERSONA MORAL) ==========
+                console.log(`${timestamp} - [WEBHOOK] Processing KYB for company: ${lead.company_name}`);
                 
-                // Guardar payload en colección peibo_onboardings
-                const peiboOnboarding = new PeiboOnboarding({
-                  external_user_id: externalUserId,
-                  applicant_id: applicantId,
-                  lead_id: lead._id,
-                  payload: peiboPayload,
-                  status: 'PENDING'
-                });
+                try {
+                  const { formatKybDataToPeibo, identifyRepresentanteLegal, validateCritical } = require('../utils/peiboFormatterCompany');
+                  
+                  // Validar estructura KYB
+                  if (!applicantData.fixedInfo?.companyInfo?.beneficiaries) {
+                    throw new Error('KYB data missing beneficiaries structure');
+                  }
+                  
+                  // Identificar Representante Legal
+                  const repLegalUbo = identifyRepresentanteLegal(applicantData.fixedInfo.companyInfo.beneficiaries);
+                  
+                  if (!repLegalUbo || !repLegalUbo.applicantId) {
+                    throw new Error('Representative Legal not found or missing KYC applicantId');
+                  }
+                  
+                  console.log(`${timestamp} - [WEBHOOK] Rep Legal identified: ${repLegalUbo.firstName} ${repLegalUbo.lastName} (applicantId: ${repLegalUbo.applicantId})`);
+                  
+                  // Obtener KYC del Representante Legal
+                  const repLegalKyc = await sumsubService.getApplicantData(repLegalUbo.applicantId);
+                  console.log(`${timestamp} - [WEBHOOK] Rep Legal KYC obtained successfully`);
+                  
+                  // Obtener beneficiarios (excluir Rep Legal)
+                  const beneficiariosList = applicantData.fixedInfo.companyInfo.beneficiaries.filter(
+                    ubo => !ubo.types?.includes('authorizedSignatory')
+                  );
+                  
+                  console.log(`${timestamp} - [WEBHOOK] Found ${beneficiariosList.length} beneficiarios to process`);
+                  
+                  // Obtener KYCs de beneficiarios en paralelo
+                  const beneficiariosKyc = await Promise.all(
+                    beneficiariosList.map(async (ubo) => {
+                      if (ubo.applicantId) {
+                        try {
+                          console.log(`${timestamp} - [WEBHOOK] Fetching KYC for beneficiary: ${ubo.firstName} ${ubo.lastName} (${ubo.applicantId})`);
+                          const kyc = await sumsubService.getApplicantData(ubo.applicantId);
+                          return { ubo, kyc };
+                        } catch (err) {
+                          console.warn(`${timestamp} - [WEBHOOK] Failed to get KYC for beneficiary ${ubo.applicantId}: ${err.message}`);
+                          return { ubo, kyc: null };
+                        }
+                      }
+                      console.log(`${timestamp} - [WEBHOOK] Beneficiary ${ubo.firstName} ${ubo.lastName} has no applicantId, using basic data`);
+                      return { ubo, kyc: null };
+                    })
+                  );
+                  
+                  // Validaciones críticas
+                  validateCritical({
+                    representanteLegal: repLegalKyc,
+                    beneficiarios: applicantData.fixedInfo.companyInfo.beneficiaries
+                  });
+                  
+                  console.log(`${timestamp} - [WEBHOOK] All critical validations passed`);
+                  
+                  // Formatear datos a formato Peibo
+                  const peiboPayload = formatKybDataToPeibo(
+                    applicantData,
+                    lead,
+                    metadataResources,
+                    { repLegalKyc, beneficiariosKyc }
+                  );
+                  
+                  console.log(`${timestamp} - [WEBHOOK] KYB Peibo Payload generated successfully`);
+                  
+                  // Guardar payload en MongoDB
+                  const peiboOnboarding = new PeiboOnboarding({
+                    external_user_id: externalUserId,
+                    applicant_id: applicantId,
+                    lead_id: lead._id,
+                    payload: peiboPayload,
+                    status: 'PENDING'
+                  });
+                  
+                  await peiboOnboarding.save();
+                  console.log(`${timestamp} - [WEBHOOK] ✓ KYB Peibo payload saved to database with ID: ${peiboOnboarding._id}`);
+                  
+                  // Registrar evento en lead
+                  lead.event_history.push({
+                    status: 'KYB_PAYLOAD_GENERATED',
+                    timestamp: new Date(),
+                    details: `KYB Peibo payload generated for ${lead.company_name}. Onboarding ID: ${peiboOnboarding._id}`
+                  });
+                  
+                } catch (kybError) {
+                  console.error(`${timestamp} - [WEBHOOK] KYB processing failed: ${kybError.message}`);
+                  console.error(`${timestamp} - [WEBHOOK] KYB Error stack:`, kybError.stack);
+                  
+                  lead.kyc_result = 'RED';
+                  lead.rejection_details = {
+                    type: 'KYB_PROCESSING_ERROR',
+                    details: kybError.message
+                  };
+                  
+                  lead.event_history.push({
+                    status: 'KYB_PROCESSING_FAILED',
+                    timestamp: new Date(),
+                    details: `KYB processing failed: ${kybError.message}`
+                  });
+                }
                 
-                await peiboOnboarding.save();
-                console.log(`${timestamp} - [WEBHOOK] ✓ Peibo payload saved to database with ID: ${peiboOnboarding._id}`);
-                
-                // TODO: Descomentar cuando se quiera enviar a Peibo
-                /*
-                console.log(`${timestamp} - [WEBHOOK] Sending data to Peibo...`);
-                const peiboResponse = await peiboService.sendOnboardingData(peiboPayload);
-                console.log(`${timestamp} - [WEBHOOK] Peibo response:`, JSON.stringify(peiboResponse));
-                
-                // Actualizar registro con respuesta exitosa
-                peiboOnboarding.status = 'SENT';
-                peiboOnboarding.peibo_response = peiboResponse;
-                await peiboOnboarding.save();
-                */
-                
-                // Guardar referencia de que se guardó el payload
-                lead.event_history.push({
-                  status: 'PAYLOAD_GENERATED',
-                  timestamp: new Date(),
-                  details: `Peibo payload generated and saved. Onboarding ID: ${peiboOnboarding._id}`
-                });
-              } catch (peiboError) {
-                console.error(`${timestamp} - [WEBHOOK] Failed to generate/save Peibo payload:`, peiboError.message);
-                
-                lead.event_history.push({
-                  status: 'PAYLOAD_GENERATION_FAILED',
-                  timestamp: new Date(),
-                  details: `Failed to generate Peibo payload: ${peiboError.message}`
-                });
+              } else {
+                // ========== PROCESO KYC (PERSONA FÍSICA) ==========
+                try {
+                  const peiboPayload = formatSumsubDataToPeibo(applicantData, lead, metadataResources);
+                  console.log(`${timestamp} - [WEBHOOK] Peibo Payload:`, JSON.stringify(peiboPayload, null, 2));
+                  
+                  // Guardar payload en colección peibo_onboardings
+                  const peiboOnboarding = new PeiboOnboarding({
+                    external_user_id: externalUserId,
+                    applicant_id: applicantId,
+                    lead_id: lead._id,
+                    payload: peiboPayload,
+                    status: 'PENDING'
+                  });
+                  
+                  await peiboOnboarding.save();
+                  console.log(`${timestamp} - [WEBHOOK] ✓ Peibo payload saved to database with ID: ${peiboOnboarding._id}`);
+                  
+                  // TODO: Descomentar cuando se quiera enviar a Peibo
+                  /*
+                  console.log(`${timestamp} - [WEBHOOK] Sending data to Peibo...`);
+                  const peiboResponse = await peiboService.sendOnboardingData(peiboPayload);
+                  console.log(`${timestamp} - [WEBHOOK] Peibo response:`, JSON.stringify(peiboResponse));
+                  
+                  // Actualizar registro con respuesta exitosa
+                  peiboOnboarding.status = 'SENT';
+                  peiboOnboarding.peibo_response = peiboResponse;
+                  await peiboOnboarding.save();
+                  */
+                  
+                  // Guardar referencia de que se guardó el payload
+                  lead.event_history.push({
+                    status: 'PAYLOAD_GENERATED',
+                    timestamp: new Date(),
+                    details: `Peibo payload generated and saved. Onboarding ID: ${peiboOnboarding._id}`
+                  });
+                } catch (peiboError) {
+                  console.error(`${timestamp} - [WEBHOOK] Failed to generate/save Peibo payload:`, peiboError.message);
+                  
+                  lead.event_history.push({
+                    status: 'PAYLOAD_GENERATION_FAILED',
+                    timestamp: new Date(),
+                    details: `Failed to generate Peibo payload: ${peiboError.message}`
+                  });
+                }
               }
 
             } catch (dataError) {
