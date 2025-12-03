@@ -44,6 +44,16 @@ const leadSchema = new mongoose.Schema({
     required: [true, 'Phone is required'],
     trim: true,
   },
+  lead_type: {
+    type: String,
+    enum: ['individual', 'company'],
+    default: 'individual',
+  },
+  company_name: {
+    type: String,
+    required: false,
+    trim: true,
+  },
   applicant_id: {
     type: String,
     required: false,

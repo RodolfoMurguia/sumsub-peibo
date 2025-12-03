@@ -92,7 +92,8 @@ class SumsubService {
    * @returns {Promise<object>} Datos del applicant creado
    */
   async createApplicant(leadData) {
-    const levelName = sumsubConfig.levelName;
+    const isCompany = leadData.lead_type === 'company';
+    const levelName = isCompany ? sumsubConfig.levelNameKyb : sumsubConfig.levelName;
     const url = `/resources/applicants?levelName=${levelName}`;
     
     // Mapear datos del lead al payload de Sumsub
@@ -106,13 +107,16 @@ class SumsubService {
         email: leadData.email,
         phone: leadData.phone,
         country: 'MEX', // Default a México según el ejemplo
-        // Otros campos opcionales se omiten por ahora ya que el lead no los tiene
       },
-      type: 'individual'
+      type: isCompany ? 'company' : 'individual'
     };
 
+    if (isCompany && leadData.company_name) {
+      payload.fixedInfo.companyName = leadData.company_name;
+    }
+
     try {
-      console.log(`[SUMSUB] Creating applicant for externalUserId: ${payload.externalUserId}`);
+      console.log(`[SUMSUB] Creating applicant for externalUserId: ${payload.externalUserId} (Type: ${payload.type}, Level: ${levelName})`);
       const response = await this.post(url, payload);
       return response.data;
     } catch (error) {

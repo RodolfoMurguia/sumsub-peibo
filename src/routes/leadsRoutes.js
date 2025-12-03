@@ -48,11 +48,20 @@ const leadsController = require('../controllers/leadsController');
  *           format: email
  *           example: "juan.perez@example.com"
  *           description: Lead email address
- *         phone:
- *           type: string
- *           example: "+521234567890"
- *           description: Lead phone number
- *         applicant_id:
+   *         phone:
+   *           type: string
+   *           example: "+521234567890"
+   *           description: Lead phone number
+   *         lead_type:
+   *           type: string
+   *           enum: [individual, company]
+   *           example: "individual"
+   *           description: Type of lead
+   *         company_name:
+   *           type: string
+   *           example: "Mi Empresa S.A. de C.V."
+   *           description: Company name (required if lead_type is company)
+   *         applicant_id:
  *           type: string
  *           example: "550e8400-e29b-41d4-a716-446655440000"
  *           description: Sumsub applicant ID
@@ -101,10 +110,18 @@ const leadsController = require('../controllers/leadsController');
  *           type: string
  *           format: email
  *           example: "juan.perez@example.com"
- *         phone:
- *           type: string
- *           example: "+521234567890"
- *     LeadResponse:
+   *         phone:
+   *           type: string
+   *           example: "+521234567890"
+   *         lead_type:
+   *           type: string
+   *           enum: [individual, company]
+   *           example: "individual"
+   *           default: "individual"
+   *         company_name:
+   *           type: string
+   *           example: "Mi Empresa S.A. de C.V."
+   *     LeadResponse:
  *       type: object
  *       properties:
  *         status:

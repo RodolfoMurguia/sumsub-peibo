@@ -18,6 +18,7 @@ services:
       - SUMSUB_SECRET_KEY=ZSjsdbrkf9KoDJn9nBjv4KGqnf19kO0m
       - SUMSUB_BASE_URL=https://api.sumsub.com
       - SUMSUB_LEVEL_NAME=KYC-PEIBO
+      - SUMSUB_LEVEL_NAME_KYB=KYB-PEIBO
     depends_on:
       - mongo
     healthcheck:
