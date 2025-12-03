@@ -9,6 +9,7 @@ const swaggerSpec = require('./config/swagger');
 const healthRoutes = require('./routes/healthRoutes');
 const webhookRoutes = require('./routes/webhookRoutes');
 const documentsRoutes = require('./routes/documentsRoutes');
+const leadsRoutes = require('./routes/leadsRoutes');
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
 app.use('/health', healthRoutes);
 app.use('/results', webhookRoutes);
 app.use('/documents', documentsRoutes);
+app.use('/leads', leadsRoutes);
 
 /**
  * @swagger
@@ -69,6 +71,9 @@ app.use('/documents', documentsRoutes);
  *                     documents:
  *                       type: string
  *                       example: /documents
+ *                     leads:
+ *                       type: string
+ *                       example: /leads
  */
 app.get('/', (req, res) => {
   res.json({
@@ -78,7 +83,8 @@ app.get('/', (req, res) => {
     endpoints: {
       health: '/health',
       results: '/results',
-      documents: '/documents'
+      documents: '/documents',
+      leads: '/leads'
     }
   });
 });
