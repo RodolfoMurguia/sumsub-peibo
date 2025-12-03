@@ -93,6 +93,9 @@ class WebhookController {
               console.log(`${timestamp} - [WEBHOOK] Extracted ${metadataResources.length} metadata resources`);
 
               // Procesamiento condicional según lead_type
+              console.log(`${timestamp} - [WEBHOOK] Lead data - lead_type: "${lead.lead_type}", company_name: "${lead.company_name}"`);
+              console.log(`${timestamp} - [WEBHOOK] Checking condition: lead.lead_type === 'company' => ${lead.lead_type === 'company'}`);
+              
               if (lead.lead_type === 'company') {
                 // ========== PROCESO KYB (PERSONA MORAL) ==========
                 console.log(`${timestamp} - [WEBHOOK] Processing KYB for company: ${lead.company_name}`);
