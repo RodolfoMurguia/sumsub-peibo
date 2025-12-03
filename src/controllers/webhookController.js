@@ -25,6 +25,35 @@ class WebhookController {
       // Si el payload trae levelName, lo validamos contra el configurado.
       if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
         console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName})`);
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+
+      if (payload.levelName && payload.levelName !== sumsubConfig.levelName && payload.levelName !== sumsubConfig.levelNameKyb) {
+        console.warn(`${timestamp} - [WEBHOOK] Ignored webhook for different level: ${payload.levelName} (Expected: ${sumsubConfig.levelName} or ${sumsubConfig.levelNameKyb})`);
+
         return res.status(200).send('Ignored'); // Responder 200 para que Sumsub no reintente infinitamente
       }
 
